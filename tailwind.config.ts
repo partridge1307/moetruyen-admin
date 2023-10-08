@@ -11,11 +11,6 @@ module.exports = {
       },
     },
     extend: {
-      backgroundImage: {
-        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic':
-          'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
-      },
       colors: {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
@@ -25,8 +20,6 @@ module.exports = {
         primary: {
           DEFAULT: 'hsl(var(--primary))',
           foreground: 'hsl(var(--primary-foreground))',
-          'read-btn': 'hsl(var(--read-btn))',
-          'read-btn-foreground': 'hsl(var(--read-btn-foreground))',
         },
         secondary: {
           DEFAULT: 'hsl(var(--secondary))',
@@ -35,7 +28,6 @@ module.exports = {
         destructive: {
           DEFAULT: 'hsl(var(--destructive))',
           foreground: 'hsl(var(--destructive-foreground))',
-          message: 'hsl(var(--message-destructive))',
         },
         muted: {
           DEFAULT: 'hsl(var(--muted))',
@@ -55,8 +47,8 @@ module.exports = {
         },
       },
       borderRadius: {
-        lg: `var(--radius)`,
-        md: `calc(var(--radius) - 2px)`,
+        lg: 'var(--radius)',
+        md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
       },
       fontFamily: {
