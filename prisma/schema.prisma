@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
 }
 
 datasource db {
@@ -26,7 +27,7 @@ model Account {
   user User @relation(fields: [userId], references: [id])
 
   @@unique([provider, providerAccountId])
-  @@index([provider, providerAccountId])
+  @@index([providerAccountId, provider])
   @@index([userId])
 }
 
@@ -109,8 +110,6 @@ model User {
   discordChannel DiscordChannel?
 
   @@index([email], type: Hash)
-  @@index([name])
-  @@index([permissions])
   @@index([teamId])
 }
 
@@ -203,7 +202,7 @@ model Manga {
   image        String
   description  Json
   review       String
-  altName      String?
+  altName      String[]
   facebookLink String?
   discordLink  String?
   creatorId    String
@@ -224,9 +223,7 @@ model Manga {
 
   @@unique([name, creatorId])
   @@index([creatorId])
-  @@index([isPublished], type: Hash)
   @@index([slug])
-  @@index([name])
 }
 
 model MangaAuthor {
@@ -253,13 +250,11 @@ model Chapter {
   comment      Comment[]
   dailyView    DailyView[]
   weeklyView   WeeklyView[]
-  history      History[]
 
   team Team? @relation(fields: [teamId], references: [id])
 
   @@index([mangaId])
   @@index([teamId])
-  @@index([isPublished], type: Hash)
 }
 
 model Comment {
@@ -280,8 +275,8 @@ model Comment {
   replyTo Comment? @relation("ReplyTo", fields: [replyToId], references: [id], onDelete: Cascade)
 
   @@index([authorId])
-  @@index([chapterId])
   @@index([mangaId])
+  @@index([chapterId])
   @@index([replyToId])
 }
 
@@ -294,8 +289,7 @@ model CommentVote {
   user    User    @relation(fields: [userId], references: [id])
 
   @@id([userId, commentId])
-  @@index([userId, commentId])
-  @@index([commentId])
+  @@index([commentId, userId])
 }
 
 model View {
@@ -349,14 +343,12 @@ model History {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  user    User     @relation(fields: [userId], references: [id])
-  manga   Manga    @relation(fields: [mangaId], references: [id], onDelete: Cascade)
-  chapter Chapter? @relation(fields: [chapterId], references: [id])
+  user  User  @relation(fields: [userId], references: [id])
+  manga Manga @relation(fields: [mangaId], references: [id], onDelete: Cascade)
 
   @@unique([userId, mangaId])
   @@index([userId])
   @@index([mangaId])
-  @@index([chapterId])
 }
 
 model DiscordChannel {
@@ -420,7 +412,6 @@ model SubForum {
   creator User @relation(fields: [creatorId], references: [id])
 
   @@index([creatorId])
-  @@index([title])
   @@index([slug])
 }
 
@@ -484,7 +475,6 @@ model PostVote {
 
   @@id([userId, postId])
   @@index([userId, postId])
-  @@index([userId])
 }
 
 model PostCommentVote {
@@ -496,8 +486,7 @@ model PostCommentVote {
   postComment PostComment @relation(fields: [postCommentId], references: [id], onDelete: Cascade)
 
   @@id([userId, postCommentId])
-  @@index([userId, postCommentId])
-  @@index([userId])
+  @@index([postCommentId, userId])
 }
 
 enum VoteType {
